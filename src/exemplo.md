@@ -1,78 +1,58 @@
-Título
+Graham Scan
 ======
 
-Subtítulo
+Como construir uma cerca?
 ---------
 
-Para criar um parágrafo, basta escrever um texto contínuo, sem pular linhas.
+Imagine que você é responsável por cercar uma série de árvores plantadas aleatoriamente em um terreno. Sua missão é colocar uma cerca **ao redor de todas elas**, gastando o **mínimo possível de material**.
 
-Você também pode criar
+Você não pode cortar nenhuma árvore, então a cerca deve dar a volta **por fora de todas**. Naturalmente, você começa a caminhar ao redor do terreno e pensa: “por onde devo passar a cerca para que tudo fique dentro, mas sem enrolar demais o caminho?”
 
-1. listas;
+---
 
-2. ordenadas,
+Geometria
+---------
 
-assim como
+Vamos abstrair um pouco da situação das árvores e utilizar a geometria para tentar nos ajudar a resolver esse problema.
 
-* listas;
-
-* não-ordenadas
-
-e imagens. Lembre que todas as imagens devem estar em uma subpasta *img*.
-
-![](logo.png)
-
-Para tabelas, usa-se a [notação do
-MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html),
-que é muito flexível. Vale a pena abrir esse link para saber todas as
-possibilidades.
-
-| coluna a | coluna b |
-|----------|----------|
-| 1        | 2        |
-
-Ao longo de um texto, você pode usar *itálico*, **negrito**, {red}(vermelho) e
-[[tecla]]. Também pode usar uma equação LaTeX: $f(n) \leq g(n)$. Se for muito
-grande, você pode isolá-la em um parágrafo.
-
-$$\lim_{n \rightarrow \infty} \frac{f(n)}{g(n)} \leq 1$$
-
-Para inserir uma animação, use `md :` seguido do nome de uma pasta onde as
-imagens estão. Essa pasta também deve estar em *img*.
-
-:bubble
-
-Você também pode inserir código, inclusive especificando a linguagem.
-
-``` py
-def f():
-    print('hello world')
-```
-
-``` c
-void f() {
-    printf("hello world\n");
-}
-```
-
-Se não especificar nenhuma, o código fica com colorização de terminal.
-
-```
-hello world
-```
-
-
-!!! Aviso
-Este é um exemplo de aviso, entre `md !!!`.
-!!!
-
-
-??? Exercício
-
-Este é um exemplo de exercício, entre `md ???`.
+??? Checkpoint
+Qual seria o modo de traduzir o cenário desse problema para a geometria? Quais elementos geométricos poderiam representar bem:
+* o terreno?
+* as árvores?
+* as cercas individualmente?
+* todas as certas depois de conectadas?
 
 ::: Gabarito
-Este é um exemplo de gabarito, entre `md :::`.
+* O terreno poderia ser representado por um plano cartesiano.
+* As árvores poderiam ser representadas por pontos no plano.
+* Cada cerca seria um segmento de reta entre 2 pontos.
+* Quando todos os segmentos de reta estiverem conectados é formado um polígono em volta dos pontos.
 :::
 
 ???
+
+Muito bem, agora que já pensamos sobre como o nosso cenário poderia ser abstraído para a geometria, vamos à um exemplo prático.
+
+??? Checkpoint
+
+Dada a seguinte distribuição de árvores, imagine como seria o desenho de uma cerca que contorne todas elas com o menor comprimento possível, sem deixar nenhuma árvore de fora, por quais árvores (A - H) essa cerca passa?
+
+![](arvores1.png)
+
+::: Gabarito
+
+Você deve ter imaginado algo como:
+
+![](arvores2.png)
+
+Essa cerca passa pelas árvores B, D, G, C e H,formando um polígono, que na área de geometria computacional é chamado de **fecho convexo**. 
+
+:::
+
+???
+
+Fecho Convexo
+---------
+
+Vamos relembrar rapidamente sobre as aulas do ensino fundamental.
+
