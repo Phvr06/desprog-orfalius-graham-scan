@@ -54,5 +54,36 @@ Essa cerca passa pelas árvores B, D, G, C e H,formando um polígono, que na ár
 Fecho Convexo
 ---------
 
-Vamos relembrar rapidamente sobre as aulas do ensino fundamental.
+Um fecho convexo é o **menor conunto convexo** que contém um conjunto de pontos denominado de S. Geometricamente, forma um polígono convexo, cujos vértices são um subconjunto de pontos de S. Vamos começar analisando um exemplo simples:
+
+??? Exemplo 1
+
+![](Pontos1.png)
+
+???
+
+No exemplo acima, temos o conjunto de pontos *S* = (A,B,C,D). O fecho convexo desse conjunto seria o equivalente ao triângulo ABC
+
+??? Exemplo 1
+
+![](Pontos2.png)
+
+???
+
+Note que, o ponto D pertence a *S*, mas não pertence ao fecho convexo de *S*. Suponha agora que um novo ponto E seja adicionado ao conjunto de pontos, conforme a figura abaixo
+
+??? Exemplo 2
+
+![](PontoE1.png)
+
+???
+
+O novo fecho convexo do conjunto *S* passa a ser
+
+??? Exemplo 2
+
+![](PontoE2.png)
+
+???
+
 
