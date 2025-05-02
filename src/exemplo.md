@@ -54,7 +54,7 @@ Essa cerca passa pelas árvores B, D, G, C e H,formando um polígono, que na ár
 Fecho Convexo
 ---------
 
-Um fecho convexo é o **menor conunto convexo** que contém um conjunto de pontos denominado de S. Geometricamente, forma um polígono convexo, cujos vértices são um subconjunto de pontos de S. Vamos começar analisando um exemplo simples:
+O fecho convexo de um conjunto de pontos $S$ é o menor polígono convexo que os contém, formado por alguns dos próprios pontos de $S$ como vértices. Vamos começar com um exemplo simples:
 
 ??? Exemplo 1
 
@@ -90,7 +90,7 @@ Introdução ao algoritmo de Grahan Scan
 ---
 
 Eu sei que intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em método que realiza essa tarefa, diversas pessoas deram soluções distintas para essa questão e uma delas foi o **algoritmo de Grahan Scan**. Então, 
-estudaremos agora a **lógica** dele e o seu passo a passo, sem se preocupar com o cógigo ou implementação.
+estudaremos agora a **lógica** dele e o seu passo a passo, sem se preocupar com o código ou implementação.
 
 Passo 1: precisamos escolher um ponto para começar, tal ponto de inicio chama-se 'pivô'.
 
@@ -101,13 +101,13 @@ Dada a seguinte imagem, qual o ponto apropriado para ser o pivô ?
 
 ::: Gabarito
 
-**O ponto B**, pois ele é aquele com a **menor coordenada em Y**, ainda, se existissem 2 pontos com a mesma coordenada em Y, deve-se escolher aquele com o menor X.
+**O ponto B** seria a escolha mais tradicional para o algoritmo, pois ele é aquele com a **menor coordenada em Y**, porém, qualquer ponto de uma extremidade serviria: o mais da direita (D), mais a esquerda (C ou H) ou o mais a cima (G) também são opções válidas. Vamos adotar sempre o ponto mais baixo, em caso de haver mais de um como com o ponto mais a esquerda desse exemplo, vamos adotar sempre aquele escolher aquele mais à esquerda (menor X).
 
 :::
 
 ???
 
-Passo 2: Agora que sabemos em que ponto começar, para onde iremos ? **Começando do ponto com maior X**, devemos calcular o ângulo que cada outro ponto faz em relação a uma linha horizontal passando pelo pivô e o ordenamos de modo crescente, de modo que essa iteção ocorra no sentido **anti-horário**. Uma vez que temos essa lista ordenada, começamos traçando uma reta entre o pivô e o ponto que forma o menor ângulo.
+Passo 2: Agora que sabemos em que ponto começar, para onde iremos? Devemos calcular o ângulo que cada outro ponto faz em relação a uma linha horizontal passando pelo pivô e ordenamos todos os pontos com base nesse ângulo, de modo que os pontos fiquem ordenados no sentido **anti-horário**. Uma vez que temos essa lista ordenada, começamos traçando uma reta entre o pivô e o ponto que forma o menor ângulo.
 
 Siga os exemplos abaixo para uma explicação mais visual:
 
@@ -119,14 +119,14 @@ Dado um conjunto de pontos:
 
 ???
 
-Descobre-se os ângulos formados entres os pontos e o pivõ, em relação ao eixo X: 
+Descobre-se os ângulos formados entres os pontos e o pivô, em relação ao eixo X: 
 ??? Exemplo 2
 
 ![](angulos2.png)
 
 ???
 
-Sabendo que o alpha é o menor ângulo, traça-se uma reta entre o pivô (A) e o ponto B: 
+Sabendo que o $\alpha$ é o menor ângulo, traça-se uma reta entre o pivô (A) e o ponto B: 
 ??? Exemplo 3
 
 ![](angulos3.png)
@@ -136,7 +136,7 @@ Sabendo que o alpha é o menor ângulo, traça-se uma reta entre o pivô (A) e o
 Excelente, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
 
 !!!
-CUIDADO!! Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta AB (pontilhado) e a reta EB, esse fato é **crucial** para o funcionamento do algoritmo, pois caso encontremos um 'giro' no sentido **horário** teremos que mudar o procedimento.
+Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta AB (pontilhado) e a reta EB, esse fato é **crucial** para o funcionamento do algoritmo, pois caso encontremos um 'giro' no sentido **horário** teriamos que mudar o procedimento.
 !!!
 
 ??? Exemplo 4
@@ -145,7 +145,7 @@ CUIDADO!! Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entr
 
 ???
 
-A mesma coisa se repete entre o ponto E e F.
+A mesma coisa se repete entre os pontos E e F.
 
 ??? Exemplo 5
 
@@ -153,7 +153,7 @@ A mesma coisa se repete entre o ponto E e F.
 
 ???
 
-Entretanto, quando conecta-se F e D observa-se um giro no sentido **horário**, quando isso ocorre devemos **descartar** o ponto F, pois ele com certeza não pertence ao fecho e retornamos ao ponto anterior (E)
+Entretanto, quando conecta-se F e D observa-se um giro no sentido **horário**, quando isso ocorre devemos **descartar** o ponto F e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior (E)
 
 ??? Exemplo 6
 
@@ -161,7 +161,7 @@ Entretanto, quando conecta-se F e D observa-se um giro no sentido **horário**, 
 
 ???
 
-Observamos o mesmo problema quando conectamos DE, assim, descartamos D e voltamos para B
+Observamos o mesmo problema quando conectamos DE, assim, descartamos E e voltamos para B
 
 ??? Exemplo 7
 
@@ -177,7 +177,7 @@ Conectando B com D não observamos esse problema, assim, é possível continuar 
 
 ???
 
-Por fim: 
+Por fim, quando continuamos com esse procedimento, traçaremos os segmentos DC e CA, concluindo o fecho para este exemplo: 
 
 ??? Fecho Completo
 
@@ -187,12 +187,13 @@ Por fim:
 
 ???Exercício 
 
-Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan
+Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Não esqueça de incluir os segmentos que foram feitos e depois descartados
 
 ![](angulos10.png)
 
 
 ::: Gabarito
+
 
 
 :::
