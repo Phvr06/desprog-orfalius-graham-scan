@@ -64,7 +64,7 @@ O fecho convexo de um conjunto de pontos $S$ é o menor polígono convexo que os
 
 ???
 
-No exemplo acima, temos o conjunto de pontos *S* = (A,B,C,D). O fecho convexo desse conjunto seria o equivalente ao triângulo ABC
+No exemplo acima, temos o conjunto de pontos *S* = (A,B,C,D). O fecho convexo desse conjunto seria o equivalente ao triângulo $\overline{\rm ABC}$
 
 ??? Exemplo 1
 
@@ -143,7 +143,7 @@ Sabendo que o $\alpha$ é o menor ângulo, traça-se uma reta entre o pivô (A) 
 Excelente, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
 
 !!!
-Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta AB (pontilhado) e a reta EB, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
+Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta $\overline{\rm AB}$ (pontilhado) e a reta $\overline{\rm EB}$, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
 !!!
 
 ??? Exemplo 4
@@ -168,7 +168,7 @@ Entretanto, quando conecta-se F e D observa-se um giro no sentido **horário**, 
 
 ???
 
-Observamos o mesmo problema quando conectamos DE, assim, descartamos E e voltamos para B
+Observamos o mesmo problema quando conectamos $\overline{\rm DE}$, assim, descartamos E e voltamos para B
 
 ??? Exemplo 7
 
@@ -184,7 +184,7 @@ Conectando B com D não observamos esse problema, assim, é possível continuar 
 
 ???
 
-Dando sequência ao procedimento, descobriremos que os segmentos DC e CA atendem a todos os requisitos, e portanto, é obtido o fecho convexo desse conjunto de pontos: 
+Dando sequência ao procedimento, descobriremos que os segmentos $\overline{\rm DC}$ e $\overline{\rm CA}$ atendem a todos os requisitos, e portanto, é obtido o fecho convexo desse conjunto de pontos: 
 
 ??? Fecho Completo
 
@@ -196,20 +196,20 @@ Para o exemplo anterior a resposta esperada seria:
 
 Ordem: B-E-F-D-C
 
-* $+$AB
-* $+$EB
-* $+$EF
-* $+$DF
-* $-$DF
-* $-$EF
-* $+$DE
-* $-$DE
-* $-$EB
-* $+$DB
-* $+$DC
-* $+$CA
+* $+ \overline{\rm AB}$
+* $+ \overline{\rm EB}$
+* $+ \overline{\rm EF}$
+* $+ \overline{\rm DF}$
+* $- \overline{\rm DF}$
+* $- \overline{\rm EF}$
+* $+ \overline{\rm DE}$
+* $- \overline{\rm DE}$
+* $- \overline{\rm EB}$
+* $+ \overline{\rm DB}$
+* $+ \overline{\rm DC}$
+* $+ \overline{\rm CA}$
 
-Ou seja, para cada vez que um segmento é adicionado, usa-se a notação "+AB". e para cada vez que voltar um passo, ou seja, para quando um segmento não será mais utilizado, é usada a notação "-AB".
+Ou seja, para cada vez que um segmento é adicionado, usa-se a notação "$+ \overline{\rm AB}$". e para cada vez que voltar um passo, ou seja, para quando um segmento não será mais utilizado, é usada a notação "$- \overline{\rm AB}$".
 
 ???Exercício 
 
@@ -226,24 +226,24 @@ D-B-C-E-G-F-H-I
 
 Para chegar a essa ordem, os seguintes segmentos foram utilizados:
 
-* $+$AD
-* $+$DB
-* $+$BC
-* $-$BC
-* $-$DB
-* $+$DC
-* $+$CE
-* $-$CE
-* $-$DC
-* $+$DE
-* $+$EG
-* $+$GF
-* $-$GF
-* $-$EG
-* $+$EF
-* $+$FH 
-* $+$HI
-* $+$IA
+* $+ \overline{\rm AD}$
+* $+ \overline{\rm DB}$
+* $+ \overline{\rm BC}$
+* $- \overline{\rm BC}$
+* $- \overline{\rm DB}$
+* $+ \overline{\rm DC}$
+* $+ \overline{\rm CE}$
+* $- \overline{\rm CE}$
+* $- \overline{\rm DC}$
+* $+ \overline{\rm DE}$
+* $+ \overline{\rm EG}$
+* $+ \overline{\rm GF}$
+* $- \overline{\rm GF}$
+* $- \overline{\rm EG}$
+* $+ \overline{\rm EF}$
+* $+ \overline{\rm FH}$
+* $+ \overline{\rm HI}$
+* $+ \overline{\rm IA}$
 
 :::
 
