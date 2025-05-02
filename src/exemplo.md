@@ -86,28 +86,31 @@ O novo fecho convexo do conjunto *S* passa a ser
 
 ???
 
+Ou seja, um fecho convexo de um conjunto de pontos é um polígono convexo que engloba **todos** os pontos de dado conjunto.
+
 Introdução ao algoritmo de Grahan Scan
 ---
 
-Eu sei que intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em método que realiza essa tarefa, diversas pessoas deram soluções distintas para essa questão e uma delas foi o **algoritmo de Grahan Scan**. Então, 
-estudaremos agora a **lógica** dele e o seu passo a passo, sem se preocupar com o código ou implementação.
+Intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em um método que realiza essa tarefa, diversas soluções para essa questão foram criadas, e uma delas foi o **algoritmo de Grahan Scan**. Estudaremos agora a **lógica** dele e seu passo a passo, sem se preocupar inicialmente com seu código ou implementação.
 
-Passo 1: precisamos escolher um ponto para começar, tal ponto de inicio chama-se 'pivô'.
+Passo 1: precisamos escolher um ponto para começar, tal ponto de inicio chama-se "pivô".
 
 ???
-Dada a seguinte imagem, qual o ponto apropriado para ser o pivô ?
+No exemplo inicial, qual o ponto apropriado para ser o pivô ?
 
 ![](arvores1.png)
 
 ::: Gabarito
 
-**O ponto B** seria a escolha mais tradicional para o algoritmo, pois ele é aquele com a **menor coordenada em Y**, porém, qualquer ponto de uma extremidade serviria: o mais da direita (D), mais a esquerda (C ou H) ou o mais a cima (G) também são opções válidas. Vamos adotar sempre o ponto mais baixo, em caso de haver mais de um como com o ponto mais a esquerda desse exemplo, vamos adotar sempre aquele escolher aquele mais à esquerda (menor X).
+**O ponto B** seria a escolha mais tradicional para o algoritmo, pois ele é aquele com a **menor coordenada em Y**, porém, qualquer ponto de uma extremidade serviria: o mais da direita (D), mais a esquerda (C ou H) ou o mais a cima (G) também são opções válidas. Vamos adotar sempre o ponto mais baixo, e, em caso de haver outro ponto na mesma coordenada Y, será adotado o com a menor coordenada X, ou seja, o mais a esquerda.
 
 :::
 
 ???
 
-Passo 2: Agora que sabemos em que ponto começar, para onde iremos? Devemos calcular o ângulo que cada outro ponto faz em relação a uma linha horizontal passando pelo pivô e ordenamos todos os pontos com base nesse ângulo, de modo que os pontos fiquem ordenados no sentido **anti-horário**. Uma vez que temos essa lista ordenada, começamos traçando uma reta entre o pivô e o ponto que forma o menor ângulo.
+Passo 2: Agora que sabemos em que ponto começar, para onde iremos?
+
+Primeiro, para cada ponto, calculamos o ângulo entre a linha horizontal que passa pelo pivô e o segmento que o une ao pivô. Em seguida, ordenamos todos os pontos em ordem crescente desse ângulo, o que os dispõe no sentido **anti-horário** ao redor do pivô. Com a lista organizada, iniciamos o fecho convexo traçando o segmento que liga o pivô ao ponto de menor ângulo
 
 Siga os exemplos abaixo para uma explicação mais visual:
 
@@ -119,7 +122,7 @@ Dado um conjunto de pontos:
 
 ???
 
-Descobre-se os ângulos formados entres os pontos e o pivô, em relação ao eixo X: 
+Descobre-se os ângulos formados entres os pontos e o pivô (Ponto A), em relação ao eixo X: 
 ??? Exemplo 2
 
 ![](angulos2.png)
@@ -136,7 +139,7 @@ Sabendo que o $\alpha$ é o menor ângulo, traça-se uma reta entre o pivô (A) 
 Excelente, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
 
 !!!
-Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta AB (pontilhado) e a reta EB, esse fato é **crucial** para o funcionamento do algoritmo, pois caso encontremos um 'giro' no sentido **horário** teriamos que mudar o procedimento.
+Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta AB (pontilhado) e a reta EB, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
 !!!
 
 ??? Exemplo 4
@@ -145,7 +148,7 @@ Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a contin
 
 ???
 
-A mesma coisa se repete entre os pontos E e F.
+O mesmo ocorre entre os pontos E e F.
 
 ??? Exemplo 5
 
@@ -177,21 +180,13 @@ Conectando B com D não observamos esse problema, assim, é possível continuar 
 
 ???
 
-Por fim, quando continuamos com esse procedimento, traçaremos os segmentos DC e CA, concluindo o fecho para este exemplo: 
+Dando sequência ao procedimento, descobriremos que os segmentos DC e CA atendem a todos os requisitos, e portanto, é obtido o fecho convexo desse conjunto de pontos: 
 
 ??? Fecho Completo
 
 ![](angulos9.png)
 
 ???
-
-???Exercício 
-
-Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Pode ser útil escrever primeiro qual a ordem dos pontos em relação ao A. Não esqueça de incluir os segmentos que foram feitos e depois descartados!
-
-![](angulos10.png)
-
-::: Formato de resposta
 
 Para o exemplo anterior a resposta esperada seria:
 
@@ -210,11 +205,22 @@ Ordem: B-E-F-D-C
 * $+$DC
 * $+$CA
 
-:::
+Ou seja, para cada vez que um segmento é adicionado, usa-se a notação "+AB". e para cada vez que voltar um passo, ou seja, para quando um segmento não será mais utilizado, é usada a notação "-AB".
+
+???Exercício 
+
+Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Pode ser útil escrever primeiro qual a ordem dos pontos em relação ao A. Não esqueça de incluir os segmentos que foram feitos e depois descartados!
+
+![](angulos10.png)
+
 
 ::: Gabarito
 
-Ordem: D-B-C-E-G-F-H-I
+Adotando o ponto A como o pivô, teremos a seguinte ordem:
+
+D-B-C-E-G-F-H-I
+
+Para chegar a essa ordem, os seguintes segmentos foram utilizados:
 
 * $+$AD
 * $+$DB
