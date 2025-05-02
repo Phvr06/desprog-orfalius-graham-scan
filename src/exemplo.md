@@ -51,6 +51,8 @@ Essa cerca passa pelas árvores B, D, G, C e H,formando um polígono, que na ár
 
 ???
 
+---
+
 Fecho Convexo
 ---------
 
@@ -422,11 +424,82 @@ int orientacao(Ponto a, Ponto b, Ponto c) {
 
 ??? Exercício 4
 
-Agora é a hora de realmente implementar o algoritmo, todas as funções auxiliares necessárias estão prontas. Como a implementação de pilha que possuímos é de inteiros e não de Pontos, recomendamos que armazene nela o indice dos pontos que interessam. No final, transfira essa pilha para uma a lista de pontos que será retornada.
+Agora é a hora de realmente implementar o algoritmo, todas as funções auxiliares necessárias estão prontas. Complete o início da função graham_scan e implemente o primeiro loop qie vai montar o fecho da pilha:
+
+``` c
+
+Pontos graham_scan(Pontos p) {
+  Ponto pivo = encontra_pivo(p);
+
+  quick_sort_angulo(p.pontos, p.tamanho, pivo);
+
+  stack_int *pilha = stack_int_new(p.tamanho);
+  stack_int_push(pilha, 0);
+  stack_int_push(pilha, 1);
+
+  // IMPLEMENTE O FOR AQUI
+}
+
+```
 
 ::: Gabarito
 
 ``` c
+  for (int i = 2; i < p.tamanho; i++) {
+    while (pilha->size >= 2) {
+      int topo = pilha->data[pilha->size - 1];
+      int anterior = pilha->data[pilha->size - 2];
+
+      if (orientacao(p.pontos[anterior], p.pontos[topo], p.pontos[i]) != 1) {
+        stack_int_pop(pilha);
+      } else {
+        break;
+      }
+    }
+    stack_int_push(pilha, i);
+  }
+
+```
+
+:::
+
+???
+
+??? Exercício 5
+
+Agora é a hora de implementar o último loop do códio de graham_scan. A terceira parte do código (a parte que vem depois do for implementado no exercício anterior) está dada abaixo:
+
+``` c
+  Pontos resultado;
+  resultado.tamanho = pilha->size;
+  resultado.pontos = malloc(resultado.tamanho * sizeof(Ponto));
+
+  //IMPLEMENTE O FOR AQUI
+
+  stack_int_delete(&pilha);
+  return resultado;
+
+
+```
+::: Gabarito
+
+``` c
+  for (int j = 0; j < pilha->size; j++) {
+    resultado.pontos[j] = p.pontos[pilha->data[j]];
+  }
+
+```
+
+:::
+
+???
+
+
+O código completo portanto ficou da seguinte maneira:
+
+
+``` c
+
 Pontos graham_scan(Pontos p) {
   Ponto pivo = encontra_pivo(p);
 
@@ -462,8 +535,106 @@ Pontos graham_scan(Pontos p) {
   stack_int_delete(&pilha);
   return resultado;
 }
+
 ```
+
+---
+
+Complexidade do algoritmo
+---------
+
+??? Exercício 1
+Começando com a primeira parte do código, qual será a complexidade dessa seção do código:
+
+
+``` c
+  Ponto pivo = encontra_pivo(p);
+```
+
+::: Gabarito
+
+Esse trecho do código percorre a lista de n pontos uma única vez, e portanto sua complexidade será **O(n)**
 
 :::
 
 ???
+
+??? Exercicio 2
+Agora, para algo mais simples e visto em aula, qual deve ser a complexidade dessa próxima parte do código:
+
+``` c
+  quick_sort_angulo(p.pontos, p.tamanho, pivo);
+``` 
+::: Gabarito
+
+Obviamente, como visto em sala, a complexidade desse algoritmo sera **O(n log n)**
+
+:::
+
+???
+
+??? Exercicio 3
+Agora, para a complexidade da próxima estapa do código, a construção incremental do fecho com pilha
+
+``` c
+  stack_int *pilha = stack_int_new(p.tamanho);
+
+  stack_int_push(pilha, 0);
+  stack_int_push(pilha, 1);
+
+  for (int i = 2; i < p.tamanho; i++) {
+    while (pilha->size >= 2) {
+      int topo = pilha->data[pilha->size - 1];
+      int anterior = pilha->data[pilha->size - 2];
+
+      if (orientacao(p.pontos[anterior], p.pontos[topo], p.pontos[i]) != 1) {
+        stack_int_pop(pilha);
+      } else {
+        break;
+      }
+    }
+    stack_int_push(pilha, i);
+  }
+``` 
+::: Gabarito
+
+Cada ponto entra na pilha uma vez e sai no máximo uma vez (push e pop). O total de operações de pop em toda a execução é **≤n**, e potanto, sua complexidade será **O(n)**
+
+:::
+
+??? 
+
+??? Exercicio 4
+Agora, para a complexidade da última estapa do código, a extração do resultado
+
+``` c
+  Pontos resultado;
+  resultado.tamanho = pilha->size;
+  resultado.pontos = malloc(resultado.tamanho * sizeof(Ponto));
+
+  for (int i = 0; i < pilha->size; i++) {
+    resultado.pontos[i] = p.pontos[pilha->data[i]];
+  }
+
+  stack_int_delete(&pilha);
+  return resultado;
+``` 
+::: Gabarito
+
+Copia até n pontos da estrutura da pilha para a saída, e portanto sua complexidade será **O(n)**
+
+:::
+
+??? 
+
+A complexidade total do algoritmo portanto será:
+
+``` c
+O(n) + O(nl og n) + O(n) + O(n) = O(n log n)
+``` 
+
+!!! Observação
+
+O passo dominante é a ordenação angular por quicksort, garantindo que o Graham Scan, no caso médio, seja de complexidade *O(n log n)*
+
+!!!
