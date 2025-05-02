@@ -187,7 +187,7 @@ Por fim, quando continuamos com esse procedimento, traçaremos os segmentos DC e
 
 ???Exercício 
 
-Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Não esqueça de incluir os segmentos que foram feitos e depois descartados
+Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Não esqueça de incluir os segmentos que foram feitos e depois descartados!
 
 ![](angulos10.png)
 
