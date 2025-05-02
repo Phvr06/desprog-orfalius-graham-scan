@@ -187,14 +187,53 @@ Por fim, quando continuamos com esse procedimento, traçaremos os segmentos DC e
 
 ???Exercício 
 
-Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Não esqueça de incluir os segmentos que foram feitos e depois descartados!
+Dada a imagem abaixo escreva qual deverá ser a **sequência** de segmentos formados quando aplicado o algoritmo de Grahan Scan. Pode ser útil escrever primeiro qual a ordem dos pontos em relação ao A. Não esqueça de incluir os segmentos que foram feitos e depois descartados!
 
 ![](angulos10.png)
 
+::: Formato de resposta
+
+Para o exemplo anterior a resposta esperada seria:
+
+Ordem: B-E-F-D-C
+
+* $+$AB
+* $+$EB
+* $+$EF
+* $+$DF
+* $-$DF
+* $-$EF
+* $+$DE
+* $-$DE
+* $-$EB
+* $+$DB
+* $+$DC
+* $+$CA
+
+:::
 
 ::: Gabarito
 
+Ordem: D-B-C-E-G-F-H-I
 
+* $+$AD
+* $+$DB
+* $+$BC
+* $-$BC
+* $-$DB
+* $+$DC
+* $+$CE
+* $-$CE
+* $-$DC
+* $+$DE
+* $+$EG
+* $+$GF
+* $-$GF
+* $-$EG
+* $+$EF
+* $+$FH 
+* $+$HI
+* $+$IA
 
 :::
 
