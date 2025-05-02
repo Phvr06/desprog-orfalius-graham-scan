@@ -88,8 +88,10 @@ O novo fecho convexo do conjunto *S* passa a ser
 
 Ou seja, um fecho convexo de um conjunto de pontos é um polígono convexo que engloba **todos** os pontos de dado conjunto.
 
-Introdução ao algoritmo de Grahan Scan
 ---
+
+Introdução ao algoritmo de Grahan Scan
+---------
 
 Intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em um método que realiza essa tarefa, diversas soluções para essa questão foram criadas, e uma delas foi o **algoritmo de Grahan Scan**. Estudaremos agora a **lógica** dele e seu passo a passo, sem se preocupar inicialmente com seu código ou implementação.
 
@@ -246,3 +248,222 @@ Para chegar a essa ordem, os seguintes segmentos foram utilizados:
 
 ???
 
+---
+
+Implementação do algoritmo
+---------
+
+Agora que já há um entendimento maior sobre o algoritmo de Graham Scan vamos partir para a implementação do algoritmo.
+
+??? Exercício 1
+
+A primeira e segunda partes da implementação são encontrar o ponto com o menor Y e ordenar os pontos com base no ângulo que formam com o pivô, considere que 2 funções já foram implementadas para cuidar disso, caso haja interesse, o código para elas está em "Curiosidade".
+
+Prosseguindo com a implementação, queremos que a função de Graham Scan receba todos os pontos e devolva aqueles que compõe o fecho convexo. O algoritmo vai ir passando por diversos pontos e adicionando/removendo eles com base nas condições explicadas anteriormente, de modo que sempre um ponto removido é o mais recente a ter sido adicionado, qual estrutura de dados aprendida em aula tem características que podem ser úteis nesse caso?
+
+::: Curiosidade
+
+Considere que a seguinte implementação de pontos já foi feita:
+``` c
+typedef struct {
+  int x;
+  int y;
+} Ponto;
+
+typedef struct {
+  Ponto* pontos;
+  int tamanho;
+} Pontos;
+```
+
+A implementação a seguir cuida de encontrar o ponto pivô e de ordenar todos os pontos com base no ângulo formado com ele.
+
+``` c
+#include <math.h>
+
+Ponto encontra_pivo(Pontos p) {
+  Ponto menor = p.pontos[0];
+  for (int i = 1; i < p.tamanho; i++) {
+    if (p.pontos[i].y < menor.y) {
+      menor = p.pontos[i];
+    } else if (p.pontos[i].y == menor.y) {
+      if (p.pontos[i].x < menor.x) {
+        menor = p.pontos[i];
+      }
+    }
+  }
+
+  return menor;
+}
+
+double calcula_angulo(Ponto p0, Ponto p) {
+    return atan2(p.y - p0.y, p.x - p0.x);
+}
+
+double dist(Ponto a, Ponto b) {
+    int dx = a.x - b.x;
+    int dy = a.y - b.y;
+    return dx * dx + dy * dy;
+}
+
+void troca(Ponto* v, int i, int j) {
+    Ponto temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
+
+int particiona(Ponto* v, int l, int r, Ponto pivo) {
+    int p = l;
+    double angulo_p = calcula_angulo(pivo, v[r]);
+
+    for (int i = l; i < r; i++) {
+        double angulo_i = calcula_angulo(pivo, v[i]);
+
+        if (angulo_i < angulo_p || (angulo_i == angulo_p && dist(pivo, v[i]) < dist(pivo, v[r]))) {
+            troca(v, p, i);
+            p++;
+        }
+    }
+    troca(v, p, r);
+    return p;
+}
+
+void quick_sort_r(Ponto* v, int l, int r, Ponto pivo) {
+    if (l >= r) return;
+    int p = particiona(v, l, r, pivo);
+    quick_sort_r(v, l, p - 1, pivo);
+    quick_sort_r(v, p + 1, r, pivo);
+}
+
+void quick_sort(Ponto* v, int n, Ponto pivo) {
+    quick_sort_r(v, 0, n - 1, pivo);
+}
+```
+
+:::
+
+::: Gabarito
+
+A estrutura de pilha funciona muito bem para o que desejamos fazer para o Graham Scan. Considere durante esse handout a implementação vista em aula com vetores estáticos, ela servirá para o propósito.
+
+:::
+
+???
+
+??? Exercício 2
+Ok, agora que já estabelecemos algumas coisas importantes, vamos prosseguir com a implementação.
+Considerando as funções já implementadas, teriamos um esqueleto de código parecido com isso:
+``` c
+Pontos graham_scan(Pontos p) {
+  Ponto pivo = encontra_pivo(p);
+  quick_sort(p.pontos, p.tamanho, pivo);
+
+  stack_int *pilha = stack_int_new(p.tamanho);
+}
+```
+
+Para continuar, um passo fundamental é como podemos determinar se um giro foi feito no sentido horário ou antihorário? Isso pode ser um pouco difícil de pensar sem ajuda, então há uma dica disponível caso pense que é necessário. Não é preciso pensar no código por enquanto, pense na geometria do problema. 
+
+::: Dica
+Pense nos segmentos de retas entre pontos como vetores, lembre-se da regra da mão direita, o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
+
+![](prodvet1.png)
+:::
+
+::: Gabarito
+Partindo da dica, basta calcular o produto vetorial entre 2 vetores, um para o segmento $\overline{\rm AB}$ outro para $\overline{\rm BC}$. Vamos chamar $\overline{\rm AB}$ de $\vec{u}$ e $\overline{\rm BC}$ de $\vec{v}$. 
+O produto vetorial é o resultado do determinante da matriz:
+
+$\begin{bmatrix}
+\vec{i} & \vec{j} & \vec{k}\\
+\vec{u_{x}} & \vec{u_{y}} & 0\\
+\vec{v_{x}} & \vec{v_{y}} & 0\\
+\end{bmatrix}$
+
+que resulta na expressão:
+
+$\vec{u_{x}} \cdot \vec{v_{y}} - \vec{v_{x}} \cdot \vec{u_{y}}$
+
+Caso o resultado dessa conta seja positivo, significa que a rotação é no sentido antihorário, se for negativo, a rotação é no sentido horário, se for 0, significa que os pontos estão na mesma linha.
+
+
+:::
+
+???
+
+??? Exercício 3
+
+Agora sim, sabendo sobre o exercício anterior, tente escrever o código para uma função que devolve 1 caso a rotação seja no sentido antihorário, 0 para colinear e -1 para rotação no sentido horário. A assinatura da função é:
+``` c
+int orientacao(Ponto a, Ponto b, Ponto c);
+```
+
+::: Gabarito
+Há muitas forma de escrever esse código, aqui está uma delas:
+``` c
+int orientacao(Ponto a, Ponto b, Ponto c) {
+  Ponto u;
+  u.x = b.x - a.x;
+  u.y = b.y - a.y;
+  Ponto v;
+  v.x = c.x - b.x;
+  v.y = c.y - b.y;
+
+  int val = (u.x * v.y) - (u.y * v.x);
+
+  if (val == 0) return 0;
+  return (val > 0) ? 1 : -1;
+}
+```
+
+:::
+
+???
+
+??? Exercício 4
+
+Agora é a hora de realmente implementar o algoritmo, todas as funções auxiliares necessárias estão prontas. Como a implementação de pilha que possuímos é de inteiros e não de Pontos, recomendamos que armazene nela o indice dos pontos que interessam. No final, transfira essa pilha para uma a lista de pontos que será retornada.
+
+::: Gabarito
+
+``` c
+Pontos graham_scan(Pontos p) {
+  Ponto pivo = encontra_pivo(p);
+
+  quick_sort_angulo(p.pontos, p.tamanho, pivo);
+
+  stack_int *pilha = stack_int_new(p.tamanho);
+
+  stack_int_push(pilha, 0);
+  stack_int_push(pilha, 1);
+
+  for (int i = 2; i < p.tamanho; i++) {
+    while (pilha->size >= 2) {
+      int topo = pilha->data[pilha->size - 1];
+      int anterior = pilha->data[pilha->size - 2];
+
+      if (orientacao(p.pontos[anterior], p.pontos[topo], p.pontos[i]) != 1) {
+        stack_int_pop(pilha);
+      } else {
+        break;
+      }
+    }
+    stack_int_push(pilha, i);
+  }
+
+  Pontos resultado;
+  resultado.tamanho = pilha->size;
+  resultado.pontos = malloc(resultado.tamanho * sizeof(Ponto));
+
+  for (int i = 0; i < pilha->size; i++) {
+    resultado.pontos[i] = p.pontos[pilha->data[i]];
+  }
+
+  stack_int_delete(&pilha);
+  return resultado;
+}
+```
+
+:::
+
+???
