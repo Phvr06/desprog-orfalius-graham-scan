@@ -142,7 +142,7 @@ Sabendo que o $\alpha$ é o menor ângulo, traça-se uma reta entre o pivô (A) 
 
 Excelente, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
 
-!!!
+!!! Cuidado
 Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta $\overline{\rm AB}$ (pontilhado) e a reta $\overline{\rm EB}$, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
 !!!
 
@@ -192,9 +192,9 @@ Dando sequência ao procedimento, descobriremos que os segmentos $\overline{\rm 
 
 ???
 
-Para o exemplo anterior a resposta esperada seria:
+Para esse exemplo a sequência de segmentos que foram formados durante o algoritmo foi::
 
-Ordem: B-E-F-D-C
+Ordem dos pontos em relação ao ângulo: B-E-F-D-C
 
 * $+ \overline{\rm AB}$
 * $+ \overline{\rm EB}$
@@ -367,9 +367,16 @@ Pontos graham_scan(Pontos p) {
 Para continuar, um passo fundamental é como podemos determinar se um giro foi feito no sentido horário ou antihorário? Isso pode ser um pouco difícil de pensar sem ajuda, então há uma dica disponível caso pense que é necessário. Não é preciso pensar no código por enquanto, pense na geometria do problema. 
 
 ::: Dica
-Pense nos segmentos de retas entre pontos como vetores, lembre-se da regra da mão direita, o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
+Pense nos segmentos de retas entre pontos como vetores, **lembre-se da regra da mão direita**, o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
+
+Rotação antihorária:
 
 ![](prodvet1.png)
+
+Rotação horária:
+
+![](prodvet2.png)
+
 :::
 
 ::: Gabarito
@@ -384,7 +391,7 @@ $\begin{bmatrix}
 
 que resulta na expressão:
 
-$\vec{u_{x}} \cdot \vec{v_{y}} - \vec{v_{x}} \cdot \vec{u_{y}}$
+$(\vec{u_{x}} \cdot \vec{v_{y}} - \vec{v_{x}} \cdot \vec{u_{y}})\cdot \vec{k}$
 
 Caso o resultado dessa conta seja positivo, significa que a rotação é no sentido antihorário, se for negativo, a rotação é no sentido horário, se for 0, significa que os pontos estão na mesma linha.
 
@@ -424,7 +431,7 @@ int orientacao(Ponto a, Ponto b, Ponto c) {
 
 ??? Exercício 4
 
-Agora é a hora de realmente implementar o algoritmo, todas as funções auxiliares necessárias estão prontas. Complete o início da função graham_scan e implemente o primeiro loop qie vai montar o fecho da pilha:
+Agora é a hora de realmente implementar o algoritmo, todas as funções auxiliares necessárias estão prontas. Complete o início da função graham_scan e implemente o loop principal do algoritmo, que vai adicionar à pilha os pontos que fazem parte do fecho, lembre-se que a pilha armazena apenas inteiros, e não pontos:
 
 ``` c
 
@@ -445,6 +452,15 @@ Pontos graham_scan(Pontos p) {
 ::: Gabarito
 
 ``` c
+Pontos graham_scan(Pontos p) {
+  Ponto pivo = encontra_pivo(p);
+
+  quick_sort_angulo(p.pontos, p.tamanho, pivo);
+
+  stack_int *pilha = stack_int_new(p.tamanho);
+  stack_int_push(pilha, 0);
+  stack_int_push(pilha, 1);
+
   for (int i = 2; i < p.tamanho; i++) {
     while (pilha->size >= 2) {
       int topo = pilha->data[pilha->size - 1];
@@ -458,6 +474,7 @@ Pontos graham_scan(Pontos p) {
     }
     stack_int_push(pilha, i);
   }
+}
 
 ```
 
@@ -467,7 +484,7 @@ Pontos graham_scan(Pontos p) {
 
 ??? Exercício 5
 
-Agora é a hora de implementar o último loop do códio de graham_scan. A terceira parte do código (a parte que vem depois do for implementado no exercício anterior) está dada abaixo:
+Agora é a hora de implementar o último loop do código de graham_scan. A terceira parte do código (que vem depois do for implementado no exercício anterior) está dada abaixo:
 
 ``` c
   Pontos resultado;
@@ -478,15 +495,20 @@ Agora é a hora de implementar o último loop do códio de graham_scan. A tercei
 
   stack_int_delete(&pilha);
   return resultado;
-
-
 ```
 ::: Gabarito
 
 ``` c
+Pontos resultado;
+  resultado.tamanho = pilha->size;
+  resultado.pontos = malloc(resultado.tamanho * sizeof(Ponto));
+
   for (int j = 0; j < pilha->size; j++) {
     resultado.pontos[j] = p.pontos[pilha->data[j]];
   }
+
+  stack_int_delete(&pilha);
+  return resultado;
 
 ```
 
@@ -494,10 +516,10 @@ Agora é a hora de implementar o último loop do códio de graham_scan. A tercei
 
 ???
 
-
+??? Resposta Final
 O código completo portanto ficou da seguinte maneira:
 
-
+::: Gabarito
 ``` c
 
 Pontos graham_scan(Pontos p) {
@@ -537,6 +559,8 @@ Pontos graham_scan(Pontos p) {
 }
 
 ```
+:::
+???
 
 ---
 
@@ -553,7 +577,7 @@ Começando com a primeira parte do código, qual será a complexidade dessa seç
 
 ::: Gabarito
 
-Esse trecho do código percorre a lista de n pontos uma única vez, e portanto sua complexidade será **O(n)**
+Esse trecho do código percorre a lista de n pontos uma única vez, e portanto sua complexidade será **$O(n)**
 
 :::
 
@@ -574,7 +598,7 @@ Obviamente, como visto em sala, a complexidade desse algoritmo sera **O(n log n)
 ???
 
 ??? Exercicio 3
-Agora, para a complexidade da próxima estapa do código, a construção incremental do fecho com pilha
+Agora, para a complexidade da próxima estapa do código, em que os pontos são adicionados à pilha
 
 ``` c
   stack_int *pilha = stack_int_new(p.tamanho);
