@@ -15,12 +15,12 @@ Geometria
 
 Vamos abstrair um pouco da situação das árvores e utilizar a geometria para tentar nos ajudar a resolver esse problema.
 
-??? Checkpoint
+??? Exercício
 Qual seria o modo de traduzir o cenário desse problema para a geometria? Quais elementos geométricos poderiam representar bem:
 * o terreno?
 * as árvores?
 * as cercas individualmente?
-* todas as certas depois de conectadas?
+* todas as cercas depois de conectadas?
 
 ::: Gabarito
 * O terreno poderia ser representado por um plano cartesiano.
@@ -33,7 +33,7 @@ Qual seria o modo de traduzir o cenário desse problema para a geometria? Quais 
 
 Muito bem, agora que já pensamos sobre como o nosso cenário poderia ser abstraído para a geometria, vamos à um exemplo prático.
 
-??? Checkpoint
+??? Exercício
 
 Dada a seguinte distribuição de árvores, imagine como seria o desenho de uma cerca que contorne todas elas com o menor comprimento possível, sem deixar nenhuma árvore de fora, por quais árvores (A - H) essa cerca passa?
 
@@ -56,37 +56,72 @@ Essa cerca passa pelas árvores B, D, G, C e H,formando um polígono, que na ár
 Fecho Convexo
 ---------
 
-O fecho convexo de um conjunto de pontos $S$ é o menor polígono convexo que os contém, formado por alguns dos próprios pontos de $S$ como vértices. Vamos começar com um exemplo simples:
+Para definir o fecho convexo primeiro vamos voltar para o básico da geometria e relembrar o que é um polígono convexo.
 
-??? Exemplo 1
+??? Exercício
+Qual das seguintes figuras é um polígono convexo?
+
+![](pconv1.png)
+
+![](pconv2.png)
+
+::: Gabarito
+A primeira figura é um polígono convexo.
+:::
+
+???
+
+??? Exercício
+Agora para formalizar uma definição. O que diferencia o polígono que foi classificado como convexo e o outro (côncavo) no exercício anterior?
+
+::: Gabarito
+Para um polígono ser considerado convexo, ele não pode possuir nenhum ângulo interno maior do que 180°.
+
+
+
+Uma outra regra simples para definir é que qualquer segmento de reta que tenha 2 extremidades dentro do polígono não pode passar por fora do polígono.
+
+![](pconv3.png)
+![](pconv4.png)
+
+:::
+
+???
+
+
+Agora que já relembramos o que é um polígono convexo podemos avançar. O fecho convexo de um conjunto de pontos $S$ é o subconjunto de $S$ que forma o menor polígono convexo que envolva todos os pontos de $S$. Vamos começar com um exemplo simples:
+
+??? Exercício
+Para esse conjunto de pontos, qual seria o fecho convexo?
 
 ![](Pontos1.png)
 
-???
-
-No exemplo acima, temos o conjunto de pontos *S* = (A,B,C,D). O fecho convexo desse conjunto seria o equivalente ao triângulo $\overline{\rm ABC}$
-
-??? Exemplo 1
+::: Gabarito
+Para o conjunto de pontos $S = (A,B,C,D)$. O fecho convexo seria $(A,B,C)$, o que forma o equivalente ao triângulo $\overline{\rm ABC}$
 
 ![](Pontos2.png)
 
+Note que, o ponto D pertence a $S$, mas não pertence ao fecho convexo de $S$.
+
+:::
+
 ???
 
-Note que, o ponto D pertence a *S*, mas não pertence ao fecho convexo de *S*. Suponha agora que um novo ponto E seja adicionado ao conjunto de pontos, conforme a figura abaixo
 
 ??? Exemplo 2
+Suponha agora que um novo ponto E seja adicionado ao conjunto de pontos, conforme a figura abaixo. Qual seria o feixo convexo?
 
 ![](PontoE1.png)
 
-???
-
-O novo fecho convexo do conjunto *S* passa a ser
-
-??? Exemplo 2
+::: Gabarito
+O novo fecho convexo do conjunto $S$ passa a ser $(A,B,C,E)$
 
 ![](PontoE2.png)
 
+:::
+
 ???
+
 
 Ou seja, um fecho convexo de um conjunto de pontos é um polígono convexo que engloba **todos** os pontos de dado conjunto.
 
@@ -97,10 +132,12 @@ Introdução ao algoritmo de Grahan Scan
 
 Intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em um método que realiza essa tarefa, diversas soluções para essa questão foram criadas, e uma delas foi o **algoritmo de Grahan Scan**. Estudaremos agora a **lógica** dele e seu passo a passo, sem se preocupar inicialmente com seu código ou implementação.
 
+No entanto, uma coisa é importante de se ter em mente, o algoritmo deve receber um conjunto de pontos que compõe $S$ e deve devolver os pontos **em ordem** que formam o fecho convexo de $S$, adotaremos como padrão que a ordem desses pontos deve ser no sentido **anti-horário**.
+
 Passo 1: precisamos escolher um ponto para começar, tal ponto de inicio chama-se "pivô".
 
 ???
-No exemplo inicial, qual o ponto apropriado para ser o pivô ?
+No exemplo inicial, qual o ponto apropriado para ser o pivô? Pense em qual dos pontos a seguir é fácil de ser identificado por um algoritmo e com certeza faz parte do fecho convexo.
 
 ![](arvores1.png)
 
@@ -114,8 +151,19 @@ No exemplo inicial, qual o ponto apropriado para ser o pivô ?
 
 Passo 2: Agora que sabemos em que ponto começar, para onde iremos?
 
-Primeiro, para cada ponto, calculamos o ângulo entre a linha horizontal que passa pelo pivô e o segmento que o une ao pivô. Em seguida, ordenamos todos os pontos em ordem crescente desse ângulo, o que os dispõe no sentido **anti-horário** ao redor do pivô. Com a lista organizada, iniciamos o fecho convexo traçando o segmento que liga o pivô ao ponto de menor ângulo
+Primeiro, vamos pensar aonde queremos chegar, desejamos que os pontos que o algoritmo devolve sejam **ordenados** no sentido **anti-horário**.
 
+??? Exercício
+Pensando nesse objetivo, qual propriedade geométrica entre o pivô e cada um dos pontos que poderíamos adotar como critério para que os pontos ficassem ordenados no sentido anti-horário em relação ao pivô?
+
+
+::: Gabarito
+Para cada ponto, calculamos o ângulo entre a linha horizontal que passa pelo pivô e o segmento que o une ao pivô. Em seguida, como esperamos uma saída dos pontos **ordenados** no sentido **anti-horário**, ordenaremos todos os pontos em ordem crescente desse ângulo, o que os dispõe no sentido anti-horário ao redor do pivô. 
+:::
+
+???
+
+Com a lista organizada, iniciamos o fecho convexo traçando o segmento que liga o pivô ao ponto de menor ângulo.
 Siga os exemplos abaixo para uma explicação mais visual:
 
 
