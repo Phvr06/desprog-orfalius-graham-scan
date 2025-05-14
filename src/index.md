@@ -4,10 +4,18 @@ Graham Scan
 Como construir uma cerca?
 ---------
 
-Imagine que você é responsável por cercar uma série de árvores plantadas aleatoriamente em um terreno. Sua missão é colocar uma cerca **ao redor de todas elas**, gastando o **mínimo possível de material**.
+Observe essa série de árvores plantadas aleatoriamente em um terreno. Sua missão é colocar uma cerca **ao redor de todas elas**, gastando o **mínimo possível de material**.
 
-Você não pode cortar nenhuma árvore, então a cerca deve dar a volta **por fora de todas**. Naturalmente, você começa a caminhar ao redor do terreno e pensa: “por onde devo passar a cerca para que tudo fique dentro, mas sem enrolar demais o caminho?”
+![](arvores.png)
 
+??? Exercício
+Você não pode cortar nenhuma árvore, então a cerca deve dar a volta **por fora de todas**. Naturalmente, você começa a caminhar ao redor do terreno e pensa: “por onde devo passar a cerca para que tudo fique dentro, mas sem enrolar demais o caminho?”. Desenhe como você acha que deveria ser o cercado
+
+::: Gabarito
+![](gabarito_arvores.png)
+:::
+
+???
 ---
 
 Geometria
@@ -163,36 +171,33 @@ Para cada ponto, calculamos o ângulo entre a linha horizontal que passa pelo pi
 
 ???
 
-Com a lista organizada, iniciamos o fecho convexo traçando o segmento que liga o pivô ao ponto de menor ângulo.
-Siga os exemplos abaixo para uma explicação mais visual:
+Agora com essa ideia em mente devemos praticar a ordenação, utilize o conjunto de pontos abaixo para fazer o que se pede
 
-
-Dado um conjunto de pontos: 
-??? Exemplo 1
+??? Conjunto de pontos
 
 ![](angulos1.png)
 
 ???
 
-Descobre-se os ângulos formados entres os pontos e o pivô (Ponto A), em relação ao eixo X: 
-??? Exemplo 2
+??? Exercício
 
+Desenhe o segmento de reta entre o pivô e os pontos e represente com $\alpha$, $\beta$ e $\gamma$, respectivamente, os 3 menores ângulos
+
+::: Gabarito
 ![](angulos2.png)
+:::
 
 ???
 
-Sabendo que o $\alpha$ é o menor ângulo, traça-se uma reta entre o pivô (A) e o ponto B: 
+Excelente, temos a nossa ordenação, agora para começar devemos traçar a reta que forma o menor ângulo ($\alpha$) entre o segmento e o eixo X
 ??? Exemplo 3
 
 ![](angulos3.png)
 
 ???
 
-Excelente, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
+OK, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
 
-!!! Cuidado
-Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta $\overline{\rm AB}$ (pontilhado) e a reta $\overline{\rm EB}$, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
-!!!
 
 ??? Exemplo 4
 
@@ -200,35 +205,46 @@ Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a contin
 
 ???
 
-O mesmo ocorre entre os pontos E e F.
+!!! Cuidado
+Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta $\overline{\rm AB}$ (pontilhado) e a reta $\overline{\rm EB}$, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
+!!!
 
-??? Exemplo 5
+??? Execício
+Para praticar, desenhe os dois próximos segmentos de reta e indique se ocorreu um giro no sentido horário ou anti-horário
 
+::: Gabarito do primeiro segmento
 ![](angulos5.png)
+:::
 
-???
-
-Entretanto, quando conecta-se F e D observa-se um giro no sentido **horário**, quando isso ocorre devemos **descartar** o ponto F e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior (E)
-
-??? Exemplo 6
-
+::: Gabarito do segundo segmento
 ![](angulos6.png)
 
+!!! Cuidado
+Quando conecta-se F e D observa-se um giro no sentido **horário**, quando isso ocorre devemos **descartar** o ponto F e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior (E)
+!!!
+
+:::
+
 ???
 
-Observamos o mesmo problema quando conectamos $\overline{\rm DE}$, assim, descartamos E e voltamos para B
+??? Exercício
+Se você seguiu corretamente os exercícios você chegou a conclusão que precisa ocorrer o descarte de um ponto.
+Como deveria ficar o fecho convexo após esse procedimento ?
 
-??? Exemplo 7
-
+::: Gabarito real do segundo segmento
 ![](angulos7.png)
-
+:::
 ???
 
-Conectando B com D não observamos esse problema, assim, é possível continuar o algoritmo até o fecho estar completo
 
-??? Exemplo 8
+??? Execício
+Calma! Ainda não está correto.
+Observamos o mesmo problema quando conectamos $\overline{\rm DE}$, assim, como deve ficar o segundo segmento, por fim ?
 
+
+::: Gabarito real real do segundo segmento
 ![](angulos8.png)
+:::
 
 ???
 
