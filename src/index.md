@@ -122,7 +122,7 @@ Suponha agora que um novo ponto E seja adicionado ao conjunto de pontos, conform
 ![](PontoE1.png)
 
 ::: Gabarito
-O novo fecho convexo do conjunto $S$ passa a ser $(A,B,C,E)$
+O novo fecho convexo do conjunto $S$ passa a ser $(E,C,B,A)$
 
 ![](PontoE2.png)
 
@@ -140,12 +140,12 @@ Introdução ao algoritmo de Grahan Scan
 
 Intuitivamente é muito fácil delimitar o fecho convexo, a sua mente faz isso sozinha. Mas, precisamos pensar em um método que realiza essa tarefa, diversas soluções para essa questão foram criadas, e uma delas foi o **algoritmo de Grahan Scan**. Estudaremos agora a **lógica** dele e seu passo a passo, sem se preocupar inicialmente com seu código ou implementação.
 
-No entanto, uma coisa é importante de se ter em mente, o algoritmo deve receber um conjunto de pontos que compõe $S$ e deve devolver os pontos **em ordem** que formam o fecho convexo de $S$, adotaremos como padrão que a ordem desses pontos deve ser no sentido **anti-horário**.
+No entanto, uma coisa é importante de se ter em mente, o algoritmo deve receber um conjunto de pontos que compõe $S$ e deve devolver os pontos **em ordem** que formam o fecho convexo de $S$, adotaremos como padrão que a ordem desses pontos deve ser no sentido **anti-horário**. No caso do exercício aterior, por exemplo, a saída deveria ser $(E,C,B,A)$, nessa ordem.
 
 Passo 1: precisamos escolher um ponto para começar, tal ponto de inicio chama-se "pivô".
 
 ???
-No exemplo inicial, qual o ponto apropriado para ser o pivô? Pense em qual dos pontos a seguir é fácil de ser identificado por um algoritmo e com certeza faz parte do fecho convexo.
+Nesse exemplo inicial, qual o ponto apropriado para ser o pivô? Pense em qual dos pontos a seguir é fácil de ser identificado por um algoritmo e com certeza faz parte do fecho convexo, essa é uma boa escolha para pivô, há mais de uma resposta correta.
 
 ![](arvores1.png)
 
@@ -162,7 +162,7 @@ Passo 2: Agora que sabemos em que ponto começar, para onde iremos?
 Primeiro, vamos pensar aonde queremos chegar, desejamos que os pontos que o algoritmo devolve sejam **ordenados** no sentido **anti-horário**.
 
 ??? Exercício
-Pensando nesse objetivo, qual propriedade geométrica entre o pivô e cada um dos pontos que poderíamos adotar como critério para que os pontos ficassem ordenados no sentido anti-horário em relação ao pivô?
+Pensando nesse objetivo, qual **propriedade geométrica** entre o pivô e cada um dos pontos que poderíamos adotar como critério para que os pontos ficassem ordenados no sentido anti-horário em relação ao pivô?
 
 
 ::: Gabarito
@@ -189,14 +189,21 @@ Desenhe o segmento de reta entre o pivô e os pontos e represente com $\alpha$, 
 
 ???
 
-Excelente, temos a nossa ordenação, agora para começar devemos traçar a reta que forma o menor ângulo ($\alpha$) entre o segmento e o eixo X
-??? Exemplo 3
+Excelente, temos a nossa ordenação, agora para começar a formar o fecho convexo devemos traçar segmentos de reta que formem o polígono que desejamos.
+
+???
+Considerando a ordenação que foi feita, com qual ponto o pivô deveria formar o primeiro segmento de reta? 
+
+::: Gabarito
+Como temos os pontos ordenados pelo ângulo e desejamos que os pontos sejam dados no sentido anti-horário, o ponto escolhido deve ser aquele com o menor ângulo, no caso, o ponto $B$. Esse critério de escolha para formação do próximo segmento de reta vai se repetir durante todo o algoritmo.
 
 ![](angulos3.png)
 
+:::
+
 ???
 
-OK, temos o início do nosso fecho convexo, sabemos que temos os ângulos, entre o pivô e os outros pontos em relação ao eixo X, ordenados crescentemente. Então, deve-se traçar uma reta entre o ponto atual e o ponto que tem o segundo menor ângulo. 
+OK, temos o início do nosso fecho convexo, então agora vamos repetir o mesmo processo, mantemos o segmento $\overline{\rm AB}$ e formamos o próximo segmento com o último ponto que foi utilizado ($B$) e o próximo ponto na ordem ($E$).
 
 
 ??? Exemplo 4
@@ -210,19 +217,27 @@ Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a contin
 !!!
 
 ??? Execício
-Para praticar, desenhe os dois próximos segmentos de reta e indique se ocorreu um giro no sentido horário ou anti-horário
+Para praticar, desenhe o próximo segmento de reta e indique se ocorreu um giro no sentido horário ou anti-horário.
 
 ::: Gabarito do primeiro segmento
+Ocorreu um giro no sentido anti-horário.
+
 ![](angulos5.png)
 :::
+???
+
+??? Exercício
+Agora faça o mesmo para o próximo segmento.
 
 ::: Gabarito do segundo segmento
+Ocorreu um giro no sentido horário.
+
 ![](angulos6.png)
 
-!!! Cuidado
-Quando conecta-se F e D observa-se um giro no sentido **horário**, quando isso ocorre devemos **descartar** o ponto F e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior (E)
-!!!
+Caso continuássemos o polígono com os próximos segmentos, $\overline{\rm DC}$ e $\overline{\rm CA}$, o polígono seria convexo? Caso não, qual poderia ser o procedimento para continuar?
 
+::: Gabarito
+Quando conecta-se $F$ e $D$ observa-se um giro no sentido **horário** quando isso ocorre, o ângulo interno não será mais inferior a 180°, impossibilitando que o polígono formado seja convexo. Portanto, devemos **descartar** o ponto $F$ e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior ($E$) e voltamos a seguir a lista ordenada, sem o $F$ dessa vez. Isso deverá ser repetido caso haja mais giros no sentido horário.
 :::
 
 ???
@@ -233,19 +248,12 @@ Como deveria ficar o fecho convexo após esse procedimento ?
 
 ::: Gabarito real do segundo segmento
 ![](angulos7.png)
-:::
-???
 
-
-??? Execício
-Calma! Ainda não está correto.
-Observamos o mesmo problema quando conectamos $\overline{\rm DE}$, assim, como deve ficar o segundo segmento, por fim ?
-
+Deve ter percebido que o giro para o segmento $\overline{\rm ED}$ também foi no sentido horário, logo, $E$ também deve ser descartado. Como ficaria de fato o segundo segmento?
 
 ::: Gabarito real real do segundo segmento
 ![](angulos8.png)
 :::
-
 ???
 
 Dando sequência ao procedimento, descobriremos que os segmentos $\overline{\rm DC}$ e $\overline{\rm CA}$ atendem a todos os requisitos, e portanto, é obtido o fecho convexo desse conjunto de pontos: 
@@ -431,7 +439,7 @@ Pontos graham_scan(Pontos p) {
 Para continuar, um passo fundamental é como podemos determinar se um giro foi feito no sentido horário ou antihorário? Isso pode ser um pouco difícil de pensar sem ajuda, então há uma dica disponível caso pense que é necessário. Não é preciso pensar no código por enquanto, pense na geometria do problema. 
 
 ::: Dica
-Pense nos segmentos de retas entre pontos como vetores, **lembre-se da regra da mão direita**, o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
+Pense nos segmentos de retas entre pontos como vetores, **lembre-se da regra da mão direita** (https://youtube.com/shorts/CXyjnxNH7tk?si=DZR6hHgZ5w8c-5xf), o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
 
 Rotação antihorária:
 
