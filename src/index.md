@@ -154,8 +154,7 @@ Nesse exemplo inicial, qual o ponto apropriado para ser o pivô? Pense em qual d
 **O ponto B** seria a escolha mais tradicional para o algoritmo, pois ele é aquele com a **menor coordenada em Y**, porém, qualquer ponto de uma extremidade serviria: o mais da direita (D), mais a esquerda (C ou H) ou o mais a cima (G) também são opções válidas. Vamos adotar sempre o ponto mais baixo, e, em caso de haver outro ponto na mesma coordenada Y, será adotado o com a menor coordenada X, ou seja, o mais a esquerda.
 
 :::
-
-???Exemplo
+???
 
 Passo 2: Agora que sabemos em que ponto começar, para onde iremos?
 
@@ -186,14 +185,6 @@ Desenhe o segmento de reta entre o pivô e os pontos e represente com $\alpha$, 
 ::: Gabarito
 ![](angulos2.png)
 
-??? Extra
-Consegue pensar em uma implementação de vetor que seja aplicável a essa ocasião ? Sabendo que será necessário adicionar/remover o segmento mais 'recente'
-
-::: Gabarito
-Vetor em pilha! Mas não precisa se preocupar com isso agora.
-:::
-???
-
 :::
 
 
@@ -223,7 +214,7 @@ OK, temos o início do nosso fecho convexo, então agora vamos repetir o mesmo p
 ???
 
 !!! Cuidado
-Percebeu um 'giro' ocorrendo? Lembre-se disso e mantenha o produto vetorial em mente!
+Percebeu um 'giro' ocorrendo? Lembre-se disso!
 !!!
 
 ??? Execício
@@ -246,14 +237,18 @@ Ocorreu um giro no sentido horário.
 
 Caso continuássemos o polígono com os próximos segmentos, $\overline{\rm DC}$ e $\overline{\rm CA}$, o polígono seria convexo? Caso não, qual poderia ser o procedimento para continuar?
 
-Dica: Lembre da regra da mão direita
+::: Gabarito
+Quando conecta-se $F$ e $D$ observa-se um giro no sentido **horário**, o ângulo interno não será mais inferior a 180°, impossibilitando que o polígono formado seja convexo. Portanto, devemos **descartar** o ponto $F$ e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior ($E$) e voltamos a seguir a lista ordenada, sem o $F$ dessa vez. Isso deverá ser repetido caso haja mais giros no sentido horário.
+
+Ainda, se quiser um jeito mais prático de determinar o sentido do giro, é possível utilizar a regra da mão direita para calcular o sentido da resultante do produto vetorial. Caso essa resultante esteja "entrando" na tela descarta-se o ponto.
+???
+
+??? Exercício
+Sabendo dessas condições, o algoritmo vai ir passando por diversos pontos e adicionando/removendo eles com base nas condições do giro, de modo que sempre um ponto removido é o mais recente a ter sido adicionado, qual estrutura de dados aprendida em aula tem características que podem ser úteis nesse caso?
 
 ::: Gabarito
-Quando conecta-se $F$ e $D$ observa-se um giro no sentido **horário** quando isso ocorre, o ângulo interno não será mais inferior a 180°, impossibilitando que o polígono formado seja convexo. Portanto, devemos **descartar** o ponto $F$ e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior ($E$) e voltamos a seguir a lista ordenada, sem o $F$ dessa vez. Isso deverá ser repetido caso haja mais giros no sentido horário.
-
-Ainda, uma maneira mais prática de pensar é usando a regra da mão direita para calcular o sentido da resultante do produto vetorial. Caso essa resultante esteja "entrando" na tela descarta-se o ponto.
+Estrutura de pilha!
 :::
-
 ???
 
 ??? Exercício
@@ -340,7 +335,7 @@ Para chegar a essa ordem, os seguintes segmentos foram utilizados:
 
 Desafio
 ---------
-Parabéns, você chegou ao fim do handout, caso sobre tempo, sinta-se livre para aprender como faz a implementação.
+Parabéns, você chegou ao fim do handout, caso sobre tempo, sinta-se livre para aprender como é feita a a implementação e o cálculo de sua complexidade.
 
 ---
 Implementação do algoritmo
@@ -352,7 +347,7 @@ Agora que já há um entendimento maior sobre o algoritmo de Graham Scan vamos p
 
 A primeira e segunda partes da implementação são encontrar o ponto com o menor Y e ordenar os pontos com base no ângulo que formam com o pivô, considere que 2 funções já foram implementadas para cuidar disso, caso haja interesse, o código para elas está em "Curiosidade".
 
-Prosseguindo com a implementação, queremos que a função de Graham Scan receba todos os pontos e devolva aqueles que compõe o fecho convexo. O algoritmo vai ir passando por diversos pontos e adicionando/removendo eles com base nas condições explicadas anteriormente, de modo que sempre um ponto removido é o mais recente a ter sido adicionado, qual estrutura de dados aprendida em aula tem características que podem ser úteis nesse caso?
+Mais um detalhe, como dito anteriormente, a estrutura de pilha funciona muito bem para o que desejamos fazer para o Graham Scan. Considere durante esse handout a implementação vista em aula com vetores estáticos, ela servirá para o propósito.
 
 ::: Curiosidade
 
@@ -435,13 +430,9 @@ void quick_sort(Ponto* v, int n, Ponto pivo) {
 
 :::
 
-::: Gabarito
-
-A estrutura de pilha funciona muito bem para o que desejamos fazer para o Graham Scan. Considere durante esse handout a implementação vista em aula com vetores estáticos, ela servirá para o propósito.
-
-:::
-
 ???
+
+Prosseguindo com a implementação, queremos que a função de Graham Scan receba todos os pontos e devolva aqueles que compõe o fecho convexo. 
 
 ??? Exercício 2
 Ok, agora que já estabelecemos algumas coisas importantes, vamos prosseguir com a implementação.
@@ -455,7 +446,7 @@ Pontos graham_scan(Pontos p) {
 }
 ```
 
-Para continuar, um passo fundamental é como podemos determinar se um giro foi feito no sentido horário ou antihorário? Isso pode ser um pouco difícil de pensar sem ajuda, então há uma dica disponível caso pense que é necessário. Não é preciso pensar no código por enquanto, pense na geometria do problema. 
+Para continuar, um passo fundamental é como podemos determinar se um giro foi feito no sentido horário ou antihorário? Isso pode ser um pouco difícil de pensar sem ajuda, então há uma dica disponível caso pense que é necessário (essa mesma dica já foi dada anteriormente no handout). Não é preciso pensar no código por enquanto, pense na geometria do problema. 
 
 ::: Dica
 Pense nos segmentos de retas entre pontos como vetores, **lembre-se da regra da mão direita** (https://youtube.com/shorts/CXyjnxNH7tk?si=DZR6hHgZ5w8c-5xf), o que acontece com o produto vetorial entre esses dois vetores no caso de uma rotação em cada sentido?
@@ -689,7 +680,7 @@ Obviamente, como visto em sala, a complexidade desse algoritmo sera **O(n log n)
 ???
 
 ??? Exercicio 3
-Agora, para a complexidade da próxima estapa do código, em que os pontos são adicionados à pilha
+Agora, para a complexidade da próxima etapa do código, em que os pontos são adicionados à pilha
 
 ``` c
   stack_int *pilha = stack_int_new(p.tamanho);
