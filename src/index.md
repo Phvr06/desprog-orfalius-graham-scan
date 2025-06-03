@@ -155,7 +155,7 @@ Nesse exemplo inicial, qual o ponto apropriado para ser o pivô? Pense em qual d
 
 :::
 
-???
+???Exemplo
 
 Passo 2: Agora que sabemos em que ponto começar, para onde iremos?
 
@@ -185,7 +185,17 @@ Desenhe o segmento de reta entre o pivô e os pontos e represente com $\alpha$, 
 
 ::: Gabarito
 ![](angulos2.png)
+
+??? Extra
+Consegue pensar em uma implementação de vetor que seja aplicável a essa ocasião ? Sabendo que será necessário adicionar/remover o segmento mais 'recente'
+
+::: Gabarito
+Vetor em pilha! Mas não precisa se preocupar com isso agora.
 :::
+???
+
+:::
+
 
 ???
 
@@ -213,7 +223,7 @@ OK, temos o início do nosso fecho convexo, então agora vamos repetir o mesmo p
 ???
 
 !!! Cuidado
-Perceba ainda, que ocorreu um 'giro' no sentido **anti-horário** entre a continuação da reta $\overline{\rm AB}$ (pontilhado) e a reta $\overline{\rm EB}$, esse fato é **crucial** para o funcionamento do algoritmo, pois caso ocorra um 'giro' no sentido **horário**, o procedimento deve ser alterado.
+Percebeu um 'giro' ocorrendo? Lembre-se disso e mantenha o produto vetorial em mente!
 !!!
 
 ??? Execício
@@ -236,8 +246,12 @@ Ocorreu um giro no sentido horário.
 
 Caso continuássemos o polígono com os próximos segmentos, $\overline{\rm DC}$ e $\overline{\rm CA}$, o polígono seria convexo? Caso não, qual poderia ser o procedimento para continuar?
 
+Dica: Lembre da regra da mão direita
+
 ::: Gabarito
 Quando conecta-se $F$ e $D$ observa-se um giro no sentido **horário** quando isso ocorre, o ângulo interno não será mais inferior a 180°, impossibilitando que o polígono formado seja convexo. Portanto, devemos **descartar** o ponto $F$ e as conexões com ele, pois ele com certeza não pertence ao fecho, então retornamos ao ponto anterior ($E$) e voltamos a seguir a lista ordenada, sem o $F$ dessa vez. Isso deverá ser repetido caso haja mais giros no sentido horário.
+
+Ainda, uma maneira mais prática de pensar é usando a regra da mão direita para calcular o sentido da resultante do produto vetorial. Caso essa resultante esteja "entrando" na tela descarta-se o ponto.
 :::
 
 ???
@@ -324,6 +338,11 @@ Para chegar a essa ordem, os seguintes segmentos foram utilizados:
 
 ---
 
+Desafio
+---------
+Parabéns, você chegou ao fim do handout, caso sobre tempo, sinta-se livre para aprender como faz a implementação.
+
+---
 Implementação do algoritmo
 ---------
 
